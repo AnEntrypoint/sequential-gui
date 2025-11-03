@@ -1,0 +1,147 @@
+.tools-explorer {
+}
+
+.explorer-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+}
+
+.tools-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.tools-list h3 {
+  margin-bottom: 16px;
+}
+
+.service-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.service-card:hover {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.service-card.active {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.service-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.service-card p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.service-card code {
+  display: block;
+  padding: 2px 4px;
+  background: var(--surface);
+  font-size: 0.75rem;
+}
+
+.schema-viewer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.schema-viewer h3 {
+  margin-bottom: 24px;
+}
+
+.schema-section {
+  margin-bottom: 32px;
+}
+
+.schema-section h4 {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: var(--primary);
+}
+
+.schema-section p {
+  background: var(--bg);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+}
+
+.methods-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.methods-list li {
+  background: var(--bg);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.method-name {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.code-example {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.code-example h4 {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: var(--primary);
+}
+
+.code-example pre {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .explorer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tools-list {
+    height: auto;
+  }
+
+  .methods-list {
+    grid-template-columns: 1fr;
+  }
+}
