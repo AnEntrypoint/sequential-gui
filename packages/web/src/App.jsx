@@ -39,21 +39,21 @@ export default function App() {
           <ul className="nav-links">
             <li><Link to="/">Dashboard</Link></li>
             <li><Link to="/tasks">Tasks</Link></li>
-            <li><Link to="/runner">Task Runner</Link></li>
             <li><Link to="/tools">Tools</Link></li>
-            <li><Link to="/flow-builder">Flow Builder</Link></li>
           </ul>
         </nav>
 
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/tasks" element={<TasksList />} />
             <Route path="/tasks/:taskId" element={<TaskEditor />} />
             <Route path="/runner/:taskId" element={<TaskRunner />} />
+            <Route path="/runner" element={<SelectTaskFirst page="runner" />} />
             <Route path="/tools" element={<ToolsExplorer />} />
             <Route path="/flow-builder/:taskId" element={<FlowBuilder />} />
+            <Route path="/flow-builder" element={<SelectTaskFirst page="flow-builder" />} />
             <Route path="/runs/:taskId/:runId" element={<RunDetail />} />
-            <Route path="/tasks" element={<TasksList />} />
           </Routes>
         </main>
 
@@ -99,6 +99,42 @@ function TasksList() {
               <Link to={`/runner/${task.id}`} className="btn btn-primary">Run</Link>
               <Link to={`/flow-builder/${task.id}`} className="btn">Graph</Link>
             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SelectTaskFirst({ page }) {
+  const [tasks, setTasks] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/tasks')
+      .then(r => r.json())
+      .then(setTasks)
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) return <div className="loading">Loading tasks...</div>
+  if (tasks.length === 0) return <div className="page"><p>No tasks found. Create one first!</p></div>
+
+  const firstTask = tasks[0]
+  const pageType = page === 'runner' ? 'runner' : 'flow-builder'
+
+  return (
+    <div className="page" style={{ textAlign: 'center' }}>
+      <h2>Select a Task</h2>
+      <p style={{ marginBottom: '24px' }}>Please select a task to continue</p>
+      <div className="task-grid" style={{ maxWidth: '600px', margin: '0 auto' }}>
+        {tasks.map(task => (
+          <div key={task.id} className="task-card">
+            <h3>{task.name || task.id}</h3>
+            <p>{task.description}</p>
+            <Link to={`/${pageType}/${task.id}`} className="btn btn-primary">
+              Open {pageType === 'runner' ? 'Runner' : 'Flow Builder'}
+            </Link>
           </div>
         ))}
       </div>
