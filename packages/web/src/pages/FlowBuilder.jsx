@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useStore from '../store'
+import StateMachineVisualizer from '../components/StateMachineVisualizer'
 import '../styles/FlowBuilder.css'
 
 export default function FlowBuilder() {
@@ -186,6 +187,10 @@ export default function FlowBuilder() {
         </div>
 
         <div className="preview-panel">
+          <h3>State Machine Visualization</h3>
+          <div className="visualizer-container">
+            <StateMachineVisualizer graph={graph} />
+          </div>
           <h3>Graph JSON</h3>
           <pre className="json-preview">{JSON.stringify(graph, null, 2)}</pre>
           <button
