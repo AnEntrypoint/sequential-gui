@@ -116,36 +116,74 @@ function renderStates(graph, positions) {
       <g key={`state-${stateName}`}>
         {isFinal ? (
           <>
-            <circle cx={pos.x + pos.width / 2} cy={pos.y + pos.height / 2} r="35" fill="none" stroke="var(--primary)" strokeWidth="2" />
-            <circle cx={pos.x + pos.width / 2} cy={pos.y + pos.height / 2} r="25" fill="var(--surface)" stroke="var(--primary)" strokeWidth="2" />
+            <circle
+              cx={pos.x + pos.width / 2}
+              cy={pos.y + pos.height / 2}
+              r="35"
+              fill="none"
+              stroke="var(--primary)"
+              strokeWidth="2.5"
+              style={{ filter: 'drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2))' }}
+            />
+            <circle
+              cx={pos.x + pos.width / 2}
+              cy={pos.y + pos.height / 2}
+              r="25"
+              fill="var(--surface)"
+              stroke="var(--primary)"
+              strokeWidth="2.5"
+              style={{ animation: 'pulse-state 2s ease-in-out infinite' }}
+            />
           </>
         ) : (
-          <rect
-            x={pos.x}
-            y={pos.y}
-            width={pos.width}
-            height={pos.height}
-            rx="8"
-            fill="var(--surface)"
-            stroke={isInitial ? 'var(--primary)' : 'var(--border)'}
-            strokeWidth={isInitial ? 3 : 2}
-          />
+          <>
+            {isInitial && (
+              <defs>
+                <style>{`
+                  @keyframes pulse-state {
+                    0%, 100% { filter: drop-shadow(0 2px 6px rgba(59, 130, 246, 0.2)); }
+                    50% { filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.4)); }
+                  }
+                `}</style>
+              </defs>
+            )}
+            <rect
+              x={pos.x}
+              y={pos.y}
+              width={pos.width}
+              height={pos.height}
+              rx="10"
+              fill="var(--surface)"
+              stroke={isInitial ? 'var(--primary)' : 'var(--border)'}
+              strokeWidth={isInitial ? 2.5 : 2}
+              style={{
+                filter: isInitial ? 'drop-shadow(0 4px 12px rgba(59, 130, 246, 0.2))' : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                transition: 'all 0.3s ease'
+              }}
+            />
+          </>
         )}
 
         <text
           x={pos.x + pos.width / 2}
-          y={pos.y + pos.height / 2 + 5}
+          y={pos.y + pos.height / 2 + 6}
           textAnchor="middle"
           className="state-label"
           fontSize="14"
-          fontWeight="600"
+          fontWeight="700"
           fill="var(--text)"
         >
           {stateName}
         </text>
 
         {isInitial && (
-          <text x={pos.x + 10} y={pos.y + 25} fontSize="16">
+          <text
+            x={pos.x + 12}
+            y={pos.y + 20}
+            fontSize="14"
+            fill="var(--primary)"
+            fontWeight="700"
+          >
             ▶
           </text>
         )}

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { promises as fs } from 'fs';
 import { spawnSync, spawn } from 'child_process';
+import { nowISO } from 'tasker-utils/timestamps';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,7 +60,7 @@ async function execCommand(cmd, args, cwd = ECOSYSTEM_PATH) {
 }
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', timestamp: nowISO() });
 });
 
 app.get('/api/tasks', async (req, res) => {
