@@ -1,5 +1,5 @@
 {
-  "name": "admin-gui",
+  "name": "sequential-gui",
   "version": "1.0.0",
   "description": "Admin GUI for sequential-ecosystem task management",
   "private": true,
