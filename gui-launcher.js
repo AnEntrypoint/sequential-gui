@@ -222,6 +222,55 @@ app.delete('/api/vfs/tasks/:taskId/:scope/*', async (req, res) => {
   }
 });
 
+app.get('/api/vfs/tree/:taskId', async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const tree = {};
+    
+    const scopes = ['run', 'task', 'global'];
+    
+    for (const scope of scopes) {
+      let scopePath;
+      if (scope === 'global') {
+        scopePath = join(ECOSYSTEM_PATH, 'vfs', 'global');
+      } else if (scope === 'task') {
+        scopePath = join(TASKS_PATH, taskId, 'fs');
+      } else {
+        continue;
+      }
+      
+      tree[scope] = {
+        path: scopePath,
+        exists: fsSync.existsSync(scopePath),
+        size: fsSync.existsSync(scopePath) ? await getDirectorySize(scopePath) : 0
+      };
+    }
+    
+    res.json(tree);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+async function getDirectorySize(dirPath) {
+  if (!fsSync.existsSync(dirPath)) return 0;
+  
+  let size = 0;
+  const items = await fs.readdir(dirPath, { withFileTypes: true });
+  
+  for (const item of items) {
+    const itemPath = join(dirPath, item.name);
+    if (item.isDirectory()) {
+      size += await getDirectorySize(itemPath);
+    } else {
+      const stat = await fs.stat(itemPath);
+      size += stat.size;
+    }
+  }
+  
+  return size;
+}
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`GUI Server running on http://localhost:${PORT}`);

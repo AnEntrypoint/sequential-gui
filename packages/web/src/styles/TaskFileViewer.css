@@ -1,0 +1,55 @@
+.task-file-viewer {
+  height: 100%;
+}
+
+.task-file-viewer .file-item:hover {
+  background-color: #1e293b;
+}
+
+.task-file-viewer .file-item:hover .file-actions {
+  opacity: 1;
+}
+
+.task-file-viewer button:hover:not(:disabled) {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.task-file-viewer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.task-file-viewer .icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.task-file-viewer .danger-button:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.task-file-viewer input:focus {
+  border-color: #3b82f6;
+}
+
+.task-file-viewer textarea:focus {
+  outline: 2px solid #3b82f6;
+}
+
+.task-file-viewer ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.task-file-viewer ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.task-file-viewer ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+.task-file-viewer ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
