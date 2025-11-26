@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FileText, Folder, RefreshCw, Download, Trash2, Eye, EyeOff, Plus, Upload, FolderPlus, Search, X, Edit, Save } from 'lucide-react';
+import SyntaxHighlighter from './SyntaxHighlighter';
+import '../styles/SyntaxHighlighter.css';
 
 export default function TaskFileViewer({ taskId, runId }) {
   const [scope, setScope] = useState('run');
@@ -391,7 +393,7 @@ export default function TaskFileViewer({ taskId, runId }) {
 
             {filteredFiles.map(file => (
               <div key={file.path} style={styles.fileItem}>
-                <FileText size={20} color="#94a3b8" />
+                <FileText size={20} color={getFileIconColor(file.name)} />
                 <span style={styles.fileName}>{file.name}</span>
                 <span style={styles.fileSize}>{formatBytes(file.size)}</span>
                 <span style={styles.fileDate}>{new Date(file.modified).toLocaleString()}</span>
@@ -465,7 +467,9 @@ export default function TaskFileViewer({ taskId, runId }) {
                 style={styles.editor}
               />
             ) : (
-              <pre style={styles.fileContent}>{fileContent}</pre>
+              <div style={{ flex: 1, overflow: 'auto' }}>
+                <SyntaxHighlighter code={fileContent} language={getFileLanguage(selectedFile?.name)} />
+              </div>
             )}
           </div>
         </div>
@@ -480,6 +484,43 @@ function formatBytes(bytes) {
   const sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+function getFileLanguage(filename) {
+  if (!filename) return 'text';
+  const ext = filename.split('.').pop().toLowerCase();
+  const langMap = {
+    js: 'javascript',
+    jsx: 'javascript',
+    ts: 'javascript',
+    tsx: 'javascript',
+    json: 'json',
+    md: 'markdown',
+    py: 'python',
+    txt: 'text',
+    log: 'text'
+  };
+  return langMap[ext] || 'text';
+}
+
+function getFileIconColor(filename) {
+  if (!filename) return '#94a3b8';
+  const ext = filename.split('.').pop().toLowerCase();
+  const colorMap = {
+    js: '#f0db4f',
+    jsx: '#61dafb',
+    ts: '#3178c6',
+    tsx: '#3178c6',
+    json: '#f0db4f',
+    md: '#519aba',
+    py: '#3776ab',
+    txt: '#94a3b8',
+    log: '#64748b',
+    css: '#264de4',
+    html: '#e34c26',
+    xml: '#e34c26'
+  };
+  return colorMap[ext] || '#94a3b8';
 }
 
 const styles = {

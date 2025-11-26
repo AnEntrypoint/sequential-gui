@@ -1,0 +1,66 @@
+.syntax-keyword {
+  color: #c792ea;
+  font-weight: 500;
+}
+
+.syntax-string {
+  color: #c3e88d;
+}
+
+.syntax-number {
+  color: #f78c6c;
+}
+
+.syntax-comment {
+  color: #546e7a;
+  font-style: italic;
+}
+
+.syntax-function {
+  color: #82aaff;
+  font-weight: 500;
+}
+
+.syntax-builtin {
+  color: #ffcb6b;
+}
+
+.syntax-json-key {
+  color: #89ddff;
+  font-weight: 500;
+}
+
+.syntax-md-header {
+  color: #89ddff;
+  font-weight: bold;
+}
+
+.syntax-md-bold {
+  color: #ffcb6b;
+  font-weight: bold;
+}
+
+.syntax-md-italic {
+  color: #c3e88d;
+  font-style: italic;
+}
+
+.syntax-md-code {
+  color: #f78c6c;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.syntax-md-link {
+  color: #82aaff;
+  text-decoration: underline;
+}
+
+.syntax-operator {
+  color: #89ddff;
+}
+
+.syntax-punctuation {
+  color: #94a3b8;
+}
