@@ -8,6 +8,7 @@ import { createServer } from 'http';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { promises as fs } from 'fs';
+import fsSync from 'fs';
 import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -137,6 +138,86 @@ app.post('/api/tasks/:taskId/run', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     broadcast({ type: 'runError', taskId: req.params.taskId, error: err.message });
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/vfs/tasks/:taskId/:scope/*', async (req, res) => {
+  try {
+    const { taskId, scope } = req.params;
+    const filepath = req.params[0] || '/';
+    const fullPath = join(TASKS_PATH, taskId, 'fs', scope, filepath);
+
+    if (!fsSync.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    const stat = await fs.stat(fullPath);
+
+    if (stat.isDirectory()) {
+      const entries = await fs.readdir(fullPath, { withFileTypes: true });
+      const files = [];
+      const directories = [];
+
+      for (const entry of entries) {
+        const entryPath = join(fullPath, entry.name);
+        const entryStat = await fs.stat(entryPath);
+
+        const item = {
+          name: entry.name,
+          path: join('/', filepath, entry.name),
+          size: entryStat.size,
+          modified: entryStat.mtime,
+          created: entryStat.birthtime
+        };
+
+        if (entry.isDirectory()) {
+          directories.push(item);
+        } else {
+          files.push(item);
+        }
+      }
+
+      res.json({ files, directories });
+    } else {
+      const content = await fs.readFile(fullPath, 'utf8');
+      res.json({ content, size: stat.size, modified: stat.mtime });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/vfs/tasks/:taskId/:scope/*', async (req, res) => {
+  try {
+    const { taskId, scope } = req.params;
+    const filepath = req.params[0] || '/';
+    const { content } = req.body;
+    const fullPath = join(TASKS_PATH, taskId, 'fs', scope, filepath);
+    const dir = dirname(fullPath);
+
+    if (!fsSync.existsSync(dir)) {
+      await fs.mkdir(dir, { recursive: true });
+    }
+
+    await fs.writeFile(fullPath, content);
+    broadcast({ type: 'vfs:change', taskId, scope, path: filepath });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/vfs/tasks/:taskId/:scope/*', async (req, res) => {
+  try {
+    const { taskId, scope } = req.params;
+    const filepath = req.params[0] || '/';
+    const fullPath = join(TASKS_PATH, taskId, 'fs', scope, filepath);
+
+    await fs.unlink(fullPath);
+    broadcast({ type: 'vfs:change', taskId, scope, path: filepath });
+    res.json({ success: true });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
