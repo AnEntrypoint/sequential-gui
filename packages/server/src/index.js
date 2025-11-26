@@ -7,7 +7,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { promises as fs } from 'fs';
 import { spawnSync, spawn } from 'child_process';
-import { nowISO } from 'sequential-utils/timestamps';
+
+const nowISO = () => new Date().toISOString();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
